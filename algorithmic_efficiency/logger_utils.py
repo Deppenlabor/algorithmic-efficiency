@@ -126,7 +126,10 @@ def _get_utilization() -> Dict:
   # CPU
   util_data['cpu.util.avg_percent_since_last'] = psutil.cpu_percent(
       interval=None)  # non-blocking (cpu util percentage since last call)
-  util_data['cpu.freq.current'] = psutil.cpu_freq().current
+  try:
+    util_data['cpu.freq.current'] = psutil.cpu_freq().current
+  except:
+    pass
 
   # Memory
   memory_util = psutil.virtual_memory()
@@ -137,13 +140,19 @@ def _get_utilization() -> Dict:
 
   # Disk
   disk_io_counters = psutil.disk_io_counters()
-  util_data['mem.read_bytes_since_boot'] = disk_io_counters.read_bytes
-  util_data['mem.write_bytes_since_boot'] = disk_io_counters.write_bytes
+  try:
+    util_data['mem.read_bytes_since_boot'] = disk_io_counters.read_bytes
+    util_data['mem.write_bytes_since_boot'] = disk_io_counters.write_bytes
+  except:
+    pass
 
   # Network
   net_io_counters = psutil.net_io_counters()
-  util_data['net.bytes_sent_since_boot'] = net_io_counters.bytes_sent
-  util_data['net.bytes_recv_since_boot'] = net_io_counters.bytes_recv
+  try:
+    util_data['net.bytes_sent_since_boot'] = net_io_counters.bytes_sent
+    util_data['net.bytes_recv_since_boot'] = net_io_counters.bytes_recv
+  except:
+    pass
 
   # GPU
   gpus = GPUtil.getGPUs()
