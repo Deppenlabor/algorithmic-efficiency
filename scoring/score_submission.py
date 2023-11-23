@@ -64,7 +64,7 @@ def main(_):
     dfs.append(summary_df)
 
   df = pd.concat(dfs)
-  logging.info(tabulate(df, headers='keys', tablefmt='psql'))
+  logging.info("\n" + tabulate(df, headers='keys', tablefmt='psql'))
 
   if FLAGS.compute_performance_profiles:
     performance_profile_df = performance_profile.compute_performance_profiles(
