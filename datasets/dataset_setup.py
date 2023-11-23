@@ -316,7 +316,7 @@ def download_criteo1tb(data_dir,
     p.communicate()
   _maybe_prompt_for_deletion(gz_paths, interactive_deletion)
 
-  # Split into files with 5M lines each: day_1.csv -> day_1_[0-39].csv.
+  # Split into files with 5M lines each: day_1.csv -> day_1_[000-039].csv.
   unzipped_paths = []
   for batch in range(6):
     batch_processes = []
