@@ -77,6 +77,7 @@ from datasets import librispeech_tokenizer
 
 import functools
 import os
+import sys
 import resource
 import shutil
 import subprocess
@@ -387,8 +388,7 @@ def download_fastmri(data_dir,
 
 
 def extract(source, dest, mode='r:xz'):
-  if not os.path.exists(dest):
-    os.makedirs(dest)
+  _maybe_mkdir(dest)
   logging.info(f'Extracting {source} to {dest}')
   tar = tarfile.open(source, mode)
   logging.info('Opened tar')
@@ -552,7 +552,7 @@ def setup_imagenet_pytorch(data_dir):
     if tar_filename.endswith('.tar'):
       dir_name = tar_filename[:-4]
       extract(
-          os.path.join(imagenet_pytorch_data_dir, IMAGENET_TRAIN_TAR_FILENAME),
+          os.path.join(imagenet_pytorch_data_dir, 'train', tar_filename),
           os.path.join(imagenet_pytorch_data_dir, 'train', dir_name),
           mode='r:')
 
@@ -563,14 +563,11 @@ def setup_imagenet_pytorch(data_dir):
       os.path.join(imagenet_pytorch_data_dir, 'val'),
       mode='r:')
 
-  valprep_command = [
-      'wget',
-      '-qO-',
-      ('https://raw.githubusercontent.com/soumith/imagenetloader.torch/master/'
-       'valprep.sh'),
-  ]
+  valprep_command = 'wget -qO- https://raw.githubusercontent.com/soumith/imagenetloader.torch/master/valprep.sh'
   valprep_process = subprocess.Popen(valprep_command, shell=True)
   valprep_process.communicate()
+  logging.error("execute shell script manually!!!")
+  sys.exit(-27)
   logging.info('Set up imagenet dataset for pytorch framework complete')
 
 
